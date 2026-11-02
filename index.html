@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5f0">
+  <meta name="description" content="Osobní online vizitka">
+  <title>Emma Haisová — Osobní vizitka</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f5f0;
+      --paper-deep: #eeebe4;
+      --ink: #30271f;
+      --muted: #817568;
+      --accent: #765a40;
+      --line: #ded7cb;
+      --frame: rgba(118, 90, 64, .12);
+      --shadow: 0 24px 70px rgba(55, 42, 29, .08);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #211e1a;
+      --paper-deep: #2b2620;
+      --ink: #eee7dc;
+      --muted: #b7a997;
+      --accent: #c4a47d;
+      --line: #494035;
+      --frame: rgba(196, 164, 125, .18);
+      --shadow: 0 24px 70px rgba(0, 0, 0, .22);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .3s ease, color .3s ease;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      z-index: 2;
+      top: 24px;
+      right: 28px;
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--paper);
+      color: var(--accent);
+      cursor: pointer;
+      transition: transform .2s ease, background-color .3s ease, border-color .3s ease;
+    }
+
+    .theme-toggle:hover { transform: rotate(12deg); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .theme-toggle svg { width: 19px; height: 19px; }
+    .theme-toggle .icon-moon { display: none; }
+    :root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+    main {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      padding: 96px 24px 56px;
+    }
+
+    .card {
+      position: relative;
+      width: min(100%, 920px);
+      min-height: 550px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(36px, 7vw, 88px);
+      padding: clamp(34px, 7vw, 76px);
+      border: 1px solid var(--frame);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      transition: background-color .3s ease, border-color .3s ease;
+    }
+
+    .card::before {
+      position: absolute;
+      inset: 12px;
+      border: 1px solid var(--frame);
+      content: "";
+      pointer-events: none;
+    }
+
+    .portrait-wrap { position: relative; z-index: 1; }
+
+    .portrait {
+      display: grid;
+      aspect-ratio: 4 / 5;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--paper-deep);
+      color: var(--muted);
+    }
+
+    .portrait img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .portrait-placeholder {
+      padding: 24px;
+      text-align: center;
+      font: 11px/1.7 Arial, sans-serif;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .details { position: relative; z-index: 1; }
+
+    .eyebrow {
+      margin: 0 0 22px;
+      color: var(--accent);
+      font: 10px/1.5 Arial, sans-serif;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 5.5vw, 62px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: 1.03;
+    }
+
+    .role {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .rule {
+      width: 48px;
+      height: 1px;
+      margin: 32px 0 26px;
+      background: var(--accent);
+    }
+
+    .intro {
+      max-width: 34ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .contact {
+      display: grid;
+      gap: 12px;
+      margin: 30px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .contact li { min-height: 1.5em; }
+    .contact a { color: inherit; text-decoration-color: var(--line); text-underline-offset: 4px; }
+    .contact a:hover { color: var(--accent); }
+
+    @media (max-width: 680px) {
+      .theme-toggle { top: 16px; right: 16px; width: 42px; height: 42px; }
+      main { padding: 76px 18px 32px; }
+      .card { max-width: 460px; grid-template-columns: 1fr; gap: 34px; padding: 34px; }
+      .portrait { aspect-ratio: 5 / 4; }
+      .details { padding-bottom: 10px; }
+      .rule { margin: 24px 0 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" type="button" aria-label="Zapnout tmavý režim" aria-pressed="false" title="Přepnout vzhled">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.5"></circle>
+      <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.4 15.2A8.5 8.5 0 0 1 8.8 3.6 8.5 8.5 0 1 0 20.4 15.2Z"></path>
+    </svg>
+  </button>
+
+  <main>
+    <article class="card" aria-label="Osobní vizitka">
+      <div class="portrait-wrap">
+        <div class="portrait" aria-label="Místo pro portrétní fotografii">
+          <img src="emma-haisova.jpg" alt="Portrét Emmy Haisovy">
+        </div>
+      </div>
+
+      <section class="details" aria-labelledby="name">
+        <h1 id="name">Emma<br>Haisová</h1>
+        <p class="role">Studentka</p>
+        <div class="rule" aria-hidden="true"></div>
+        <p class="intro">Studentka se zájmem o umění, finance a podnikání.</p>
+        <ul class="contact" aria-label="Kontaktní údaje">
+          <li><a href="mailto:haisovaemma@gmail.com">haisovaemma@gmail.com</a></li>
+          <li><a href="tel:+420603903672">603 903 672</a></li>
+          <li>Praha</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector('.theme-toggle');
+
+    toggle.addEventListener('click', () => {
+      const isDark = root.dataset.theme !== 'dark';
+      root.dataset.theme = isDark ? 'dark' : 'light';
+      toggle.setAttribute('aria-pressed', String(isDark));
+      toggle.setAttribute('aria-label', isDark ? 'Zapnout světlý režim' : 'Zapnout tmavý režim');
+    });
+  </script>
+</body>
+</html>
